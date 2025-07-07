@@ -5,31 +5,37 @@
 </head>
 <body>
   <h2>URL Converter</h2>
-  <p>Masukkan URL dari <code>https://ecency.com/...</code>:</p>
 
-  <input type="text" id="inputUrl" size="100" placeholder="https://ecency.com/@egoaquiles/meeting-sebastian-through-fe-de-vida-espeng">
-  <button onclick="convertUrl()">Convert</button>
+  <label for="originalUrl">Masukkan URL Asli:</label><br>
+  <input type="text" id="originalUrl" size="100" placeholder="https://ecency.com/@egoaquiles/meeting-sebastian-through-fe-de-vida-espeng"><br><br>
 
-  <h3>Hasil:</h3>
-  <p id="outputUrl"></p>
+  <button onclick="convertURL()">Convert</button>
+
+  <h3>Hasil URL:</h3>
+  <p id="convertedUrl"></p>
 
   <script>
-    function convertUrl() {
-      const input = document.getElementById("inputUrl").value;
-      const regex = /https:\/\/ecency\.com\/@([^\/]+)\/(.+)/;
+    function convertURL() {
+      const input = document.getElementById('originalUrl').value.trim();
+      const resultElement = document.getElementById('convertedUrl');
 
-      const match = input.match(regex);
+      try {
+        const url = new URL(input);
+        const pathParts = url.pathname.split('/');
 
-      if (match) {
-        const author = match[1];
-        const permlink = match[2];
-        const newUrl = `https://niddumulu.github.io/gazan/comment.html?author=${author}&permlink=${permlink}`;
-        document.getElementById("outputUrl").innerHTML = `<a href="${newUrl}" target="_blank">${newUrl}</a>`;
-      } else {
-        document.getElementById("outputUrl").textContent = "Format URL tidak dikenali.";
+        if (pathParts.length >= 3 && pathParts[1].startsWith('@')) {
+          const author = pathParts[1].substring(1); // remove '@'
+          const permlink = pathParts[2];
+
+          const newUrl = `https://niddumulu.github.io/gazan/comment.html?author=${encodeURIComponent(author)}&permlink=${encodeURIComponent(permlink)}`;
+          resultElement.innerHTML = `<a href="${newUrl}" target="_blank">${newUrl}</a>`;
+        } else {
+          resultElement.textContent = "URL tidak valid atau tidak sesuai format yang diharapkan.";
+        }
+      } catch (e) {
+        resultElement.textContent = "URL tidak valid.";
       }
     }
   </script>
 </body>
 </html>
-
