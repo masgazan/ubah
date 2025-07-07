@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>URL Converter</title>
+</head>
+<body>
+  <h2>URL Converter</h2>
+  <p>Masukkan URL dari <code>https://ecency.com/...</code>:</p>
+
+  <input type="text" id="inputUrl" size="100" placeholder="https://ecency.com/@egoaquiles/meeting-sebastian-through-fe-de-vida-espeng">
+  <button onclick="convertUrl()">Convert</button>
+
+  <h3>Hasil:</h3>
+  <p id="outputUrl"></p>
+
+  <script>
+    function convertUrl() {
+      const input = document.getElementById("inputUrl").value;
+      const regex = /https:\/\/ecency\.com\/@([^\/]+)\/(.+)/;
+
+      const match = input.match(regex);
+
+      if (match) {
+        const author = match[1];
+        const permlink = match[2];
+        const newUrl = `https://niddumulu.github.io/gazan/comment.html?author=${author}&permlink=${permlink}`;
+        document.getElementById("outputUrl").innerHTML = `<a href="${newUrl}" target="_blank">${newUrl}</a>`;
+      } else {
+        document.getElementById("outputUrl").textContent = "Format URL tidak dikenali.";
+      }
+    }
+  </script>
+</body>
+</html>
+
